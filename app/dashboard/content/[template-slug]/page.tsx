@@ -13,6 +13,7 @@ import { db } from '@/utils/db'
 import { useUser } from '@clerk/nextjs'
 import moment from 'moment'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
+import { useRouter } from 'next/router'
 
 interface PROPS{
     params:{
@@ -26,11 +27,13 @@ function CreateNewContent(props:PROPS) {
     const [loading, setLoading] = useState(false);
     const [aiOutput, setaiOutput] = useState<string>('');
     const {user} = useUser();
+    const router = useRouter();
     const {totalUsage, setTotalUsage} = useContext(TotalUsageContext);
 
     const GenerateAIContent = async(formData:any)=>{
         if(totalUsage>=10000){
             alert("Your Free Credits are Over :(");
+            router.push('/dashboard/billing')
             return;
         }
         setLoading(true);
